@@ -127,7 +127,7 @@ func ReadForm(req *http.Request, f ...*_F) error {
 		if reflect.Slice == el.Kind() {
 			postValues, exists := req.Form[finfo.FieldName]
 			if !exists {
-				postValues, exists = req.Form[finfo.FieldName + "[]"]
+				postValues, exists = req.Form[finfo.FieldName+"[]"]
 				if !exists {
 					continue
 				}
@@ -184,7 +184,10 @@ func ReadFileForm(req *http.Request, form interface{}) error {
 		if reflect.Slice == el.Kind() {
 			postValues, exists := req.MultipartForm.File[finfo.FieldName]
 			if !exists {
-				continue
+				postValues, exists = req.MultipartForm.File[finfo.FieldName+"[]"]
+				if !exists {
+					continue
+				}
 			}
 			elemType := el.Type().Elem()
 			for _, postValue := range postValues {
