@@ -127,7 +127,10 @@ func ReadForm(req *http.Request, f ...*_F) error {
 		if reflect.Slice == el.Kind() {
 			postValues, exists := req.Form[finfo.FieldName]
 			if !exists {
-				continue
+				postValues, exists = req.Form[finfo.FieldName + "[]"]
+				if !exists {
+					continue
+				}
 			}
 			elemType := el.Type().Elem()
 			for _, postValue := range postValues {
